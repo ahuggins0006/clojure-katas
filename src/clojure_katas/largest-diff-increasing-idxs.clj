@@ -24,9 +24,21 @@
 (reduce max (map (fn [[[a b]]] (- b a)) start-end-indecies))
 
 ;; compose elements into one function
-(defn largestDifference [data]
+(defn largest-difference [data]
  (let [ indexed-data (map-indexed vector data)
         all-pairs    (for [a indexed-data b (next indexed-data)] [a b])
         start-ends   (remove nil? (map (fn [ [[a b] [c d]] ] (if (<= b d) [[a c]] nil))  all-pairs))
        ]
  (reduce max (map (fn [[[a b]]] (- b a)) start-ends ))))
+
+
+(test/deftest largest-diff-increasing-idxs-test
+  (test/is (= (largest-difference [9 4 1 10 3 4 0 -1 -2]) 4))
+  (test/is (= (largest-difference [3 2 1]) 0))
+  (test/is (= (largest-difference [1 2 3]) 2))
+  (test/is (= (largest-difference [9 4 1 2 3 0 -1 -2]) 2))
+  (test/is (= (largest-difference [9 4 1 2 3 4 0 -1 -2]) 4))
+  (test/is (= (largest-difference [78 88 64 94 17 91 57 69 38 62 13 17 35 15 20]) 10))
+  (test/is (= (largest-difference [4 3 3 1 5 2]) 4)))
+
+(test/run-all-tests)
